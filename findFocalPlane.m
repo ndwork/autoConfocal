@@ -3,16 +3,14 @@
 % implied warranties of merchantability or fitness for a particular 
 % purpose.
 %
-% Written by Nicholas Dwork (ndwork@stanford.edu) and 
-% Gennifer Smith (gsmith9@stanford.edu).
+% Written by Nicholas Dwork (ndwork@stanford.edu)
 
 
-function [z0,zR,scaling] = findFocalPlane( img1, img2 )
+function [z0,zR] = findFocalPlane( img1, img2 )
   % img1 is a 2D array where intensity values are in decibels
   % img2 is a 2D array where intensity values are in decibels
   % z0 and zR are returned in pixels
-  % scaling has no units
-  
+
   goodThresh = median(img1(:)) + std(img1(:));
 
   vShift = findVertShift( img1, img2 );
