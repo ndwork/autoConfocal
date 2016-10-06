@@ -7,10 +7,12 @@
 % Gennifer Smith (gsmith9@stanford.edu).
 
 
-function mu = muFitDRC( I, dz, hf, noisePower )
+function mu = muFitDRC( I, z, h, noisePower )
 
-  Hres = 1 ./ hf(:) .* ( I(:).*I(:) ./ (I(:).*I(:) + noisePower ) );
-  term = I .* Hres;
+  dz = z(2) - z(1);
+
+  f = 1 ./ h .* ( I.*I ./ (I.*I + noisePower ) );
+  term = I .* f;
 
   nTerm = numel(term);
   integral = zeros(nTerm,1);

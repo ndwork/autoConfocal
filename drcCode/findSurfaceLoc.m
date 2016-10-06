@@ -6,7 +6,7 @@
 % Written by Nicholas Dwork (ndwork@stanford.edu) and 
 % Gennifer Smith (gsmith9@stanford.edu).
 
-function surfaceLoc = findSurfaceLoc( line )
+function skinLoc = findSkinLoc( line )
 
   n = numel(line);
   sortedLine =  sort(line);
@@ -14,9 +14,10 @@ function surfaceLoc = findSurfaceLoc( line )
   high = mean( sortedLine(round(0.9*n):end) );
 
   thresh = ( high - low ) / 2 + low;
-
+  
   mask = line > thresh;
-
+  locs = find( line > thresh );
+  
   % Find the first point that is below the threshold and the first (after
   % the threshold) that is above the threshold  
   maskDiffs = diff(mask);
@@ -27,6 +28,7 @@ function surfaceLoc = findSurfaceLoc( line )
           break;
       end
   end
-
-  surfaceLoc = firstAbove;
+  
+  skinLoc = firstAbove;
+  
 end

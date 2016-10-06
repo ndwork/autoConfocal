@@ -156,6 +156,7 @@ function [interfL,info] = get3DInterferograms(fileAndPath)
     ph_mat = zeros(lat_y,lat_x);
     prin_ph_mat = zeros(lat_y,lat_x);
     interfL = zeros(lat_y,lat_x,2*lat_z);
+    interferogramSaturated = 0;
     for n1=1:lat_y    
         junk = fread(fp,40,'uint8');
         
@@ -180,8 +181,7 @@ function [interfL,info] = get3DInterferograms(fileAndPath)
         interf = flipud(interf);   
 
         if max(max(interf)) == 4095 %if saturation
-            is_sat = 1;
-            disp('Interferogram is saturated');
+          interferogramSaturated = 1;
         end
         
         % Do apodization correction
@@ -191,4 +191,7 @@ function [interfL,info] = get3DInterferograms(fileAndPath)
         
     end
 
+    if interferogramSaturated > 0
+      disp('Interferogram is saturated');
+    end
 end

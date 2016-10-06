@@ -23,47 +23,35 @@ function BScan = getBScans(interf)
     
     end
 
-
 end
 
 function bscan = get2DScans(interf)
-   % interf = dlmread(fileAndPath);
-    FFT_length = 1024; % Is actually in original header file, but this should be correct
-    load FFTM	%This file actually contains both the forward and inverse matrices, but usually we only need the forward (so the filesize can be reduced if necessary)
-    NDFT = TempFFTM(1:FFT_length/2,:)*interf; %compute DFT for first 512 freq indices
+  % interf = dlmread(fileAndPath);
+  FFT_length = 1024; % Is actually in original header file, but this should be correct
+  load FFTM	%This file actually contains both the forward and inverse matrices, but usually we only need the forward (so the filesize can be reduced if necessary)
+  NDFT = TempFFTM(1:FFT_length/2,:)*interf; %compute DFT for first 512 freq indices
 
-    bscan=20*log10(abs(NDFT));
-
+  bscan = intensity2dB( abs(NDFT) );
+  %bscan = 20*log10( abs(NDFT) );
 end
 
 function bscan = get3DScans(interf,NW)
-   % interf = dlmread(fileAndPath);
-    FFT_length = 1024;
+  FFT_length = 1024;
 
-    %compute DFT for first 512 freq indices
-    sz = size(interf);
-    bscan = zeros(sz(1),sz(2),sz(3)/2);
-    if ndims(interf)==2
-        bscan = zeros(sz(2),1,sz(1)/2);
-    end
-    
-    tic
-    for n = 1:sz(1)
-        tic;
-            NDFT = NW(1:FFT_length/2,:)*squeeze(interf(n,:,:))';
-            bscan(n,:,:)=20*log10(abs(NDFT'));
+  %compute DFT for first 512 freq indices
+  sz = size(interf);
+  bscan = zeros(sz(1),sz(2),sz(3)/2);
+  if ndims(interf)==2
+    bscan = zeros(sz(2),1,sz(1)/2);
+  end
 
-%         for m = 1:sz(2)
-%             NDFT = NW(1:FFT_length/2,:)*double(squeeze(
-%             NDFT = NW(1:FFT_length/2,:)*double(squeeze(interf(n,m,:)));
-%             bscan(n,m,:)=20*log10(abs(NDFT'));
-%         end
-        
-        if mod(n,10)==0
-            fprintf('%d %.2f\n',n,toc);
-        end
+  halfNW = NW(1:FFT_length/2,:);
+  for n = 1:sz(1)
+    if mod(n,100)==0
+      disp(['Making scan line ', num2str(n), ' of ', num2str(sz(1))]);
     end
+    NDFT = halfNW * squeeze(interf(n,:,:))';
+    bscan(n,:,:) = intensity2dB( abs(NDFT') );
+  end
 end
-
-
 

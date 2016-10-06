@@ -4,7 +4,7 @@ function [yShear,t,inlierIndxs] = ransacYShearAndTrans( pts1, pts2, thresh )
   %
   % Uses RANSAC to find the yShear angle and vShift that aligns
   % pts2(:,1) = pts1(:,1) + t(1)
-  % pts2(:,2) = tan(shear)*pts1(:,1) + pts2(:,2) + t(2);
+  % pts2(:,2) = shear*pts1(:,1) + pts2(:,2) + t(2);
   %
   % Inputs:
   % pts1,pts2 - 2D array with N rows and 2 columns
@@ -67,7 +67,8 @@ function [yShear,t] = findYShearAndTrans( pts1, pts2 )
   A(M+1:end,2) = 1;
   v = A \ b;
 
-  yShear = atan( v(1) );
+  %yShear = atan( v(1) );
+  yShear = v(1);
   t = v(2:3);
 end
 

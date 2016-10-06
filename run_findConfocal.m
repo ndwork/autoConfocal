@@ -3,16 +3,18 @@ function run_findConfocal
   clear; close all; rng(1);
   addpath(genpath(pwd))
 
-  datacase = 9;
-  [bscan1,bscan2,dz_mm,noisePower,trans] = loadDataCase( datacase );
+  datacase = 8;
+  [bscan1,bscan2,dz_mm,noisePower,trans,trueZ0_mm,trueZR_mm] = ...
+    loadDataCase( datacase );
 
   switch trans
     case 'vShift'
       [z0,zR] = findConfocal_vShift( bscan1, bscan2 );
     case 'vShiftRot'
-      [z0,zR] = findConfocal_vShiftRot( bscan1_dB, bscan2_dB );
+      [z0,zR] = findConfocal_vShiftRot( bscan1, bscan2 );
     case 'yShearAndTrans'
-      [z0,zR] = findConfocal_yShearAndTrans( bscan1, bscan2 );
+      [z0,zR] = findConfocal_yShearAndTrans( bscan1, bscan2, ...
+        trueZ0_mm, trueZR_mm );
   end
 
   disp(['z0: ', num2str(z0)]);
@@ -26,7 +28,9 @@ function run_findConfocal
   disp(['apparent zR (mm): ', num2str(zR_mm)]);
   disp(['zR (mm): ', num2str(zR_mm/2/1.4)]);
 
-  muFit = muFit2D_DRC( bscan1, z_mm, z0_mm, zR_mm, noisePower );
+  bscan1_dB = intensity2dB( bscan1 );
+  figure; imshownice( bscan1_dB );
+  muFit = muFit2D_DRC( bscan2, z_mm, z0_mm, zR_mm, noisePower );
   figure; imshow( muFit, [0 5] );
 end
 
