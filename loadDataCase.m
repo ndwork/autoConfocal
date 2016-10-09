@@ -17,8 +17,10 @@ function [bscan1,bscan2,dz_mm,noisePower,trans,trueZ0_mm,trueZR_mm] = ...
 
     case 1
       % structured phantom with vertical shift
-      file1 = [mainDir,'/20160922_layeredPhantom/set3/phantom_raw_27.raw'];
-      file2 = [mainDir,'/20160922_layeredPhantom/set3/phantom_raw_29.raw'];
+      trueZ0_mm = 0.86;  % mm
+      trueZR_mm = 0.29;  % mm
+      file1 = [mainDir,'/20160922_layeredPhantom/set3_withoutHoles/phantom_raw_27.raw'];
+      file2 = [mainDir,'/20160922_layeredPhantom/set3_withoutHoles/phantom_raw_29.raw'];
       dz_mm = 2.57/512;
       [interf1,info1] = getInterferograms(file1,options);
       bscan1_dB = getBScans(interf1);
@@ -29,6 +31,8 @@ function [bscan1,bscan2,dz_mm,noisePower,trans,trueZ0_mm,trueZR_mm] = ...
 
     case 2
       % structured phantom with vertical shift
+      trueZ0_mm = 1.24;  % mm
+      trueZR_mm = 0.29;  % mm
       file1 = [mainDir,'/20160922_layeredPhantom/set4/flat/phantom_raw_0.raw'];
       file2 = [mainDir,'/20160922_layeredPhantom/set4/flat/phantom_raw_5.raw'];
       [interf1,info1] = getInterferograms(file1,options);
@@ -41,6 +45,8 @@ function [bscan1,bscan2,dz_mm,noisePower,trans,trueZ0_mm,trueZR_mm] = ...
 
     case 3
       % structured phantom with vertical shift
+      trueZ0_mm = 1.35;   % mm
+      trueZR_mm = 0.29;  % mm
       file1 = [mainDir,'/20160922_layeredPhantom/set5/phantom_raw_41.raw'];
       file2 = [mainDir,'/20160922_layeredPhantom/set5/phantom_raw_45.raw'];
       [interf1,info1] = getInterferograms(file1,options);

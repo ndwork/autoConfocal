@@ -100,11 +100,11 @@ figure; imshow( diff_dB .* mask, [] )
   meanImg = (smooth1+smooth2)/2;
   %normWeights = minImg > 10;
   normWeights = max(minImg,0);
-normWeights = normWeights .* normWeights;
+  normWeights = normWeights .* normWeights;
   %normWeights = sqrt( abs(max(meanImg,0)) );
   %normWeights = abs(diff_dB);
   %normWeights( minImg < goodThresh | mask==0 ) = 0;
-  normWeights( mask==0 ) = 0;
+  normWeights = normWeights .* mask;
 
 sliver = 0;
 if sliver == 1

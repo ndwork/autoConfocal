@@ -3,13 +3,14 @@ function run_findConfocal
   clear; close all; rng(1);
   addpath(genpath(pwd))
 
-  datacase = 8;
+  datacase = 1;
   [bscan1,bscan2,dz_mm,noisePower,trans,trueZ0_mm,trueZR_mm] = ...
     loadDataCase( datacase );
 
   switch trans
     case 'vShift'
-      [z0,zR] = findConfocal_vShift( bscan1, bscan2 );
+      [z0,zR] = findConfocal_vShift( bscan1, bscan2, ...
+        trueZ0_mm, trueZR_mm );
     case 'vShiftRot'
       [z0,zR] = findConfocal_vShiftRot( bscan1, bscan2 );
     case 'yShearAndTrans'
@@ -30,7 +31,7 @@ function run_findConfocal
 
   bscan1_dB = intensity2dB( bscan1 );
   figure; imshownice( bscan1_dB );
-  muFit = muFit2D_DRC( bscan2, z_mm, z0_mm, zR_mm, noisePower );
+  muFit = muFit2D_DRC( shortScan1, z_mm, z0_mm, zR_mm, noisePower );
   figure; imshow( muFit, [0 5] );
 end
 
