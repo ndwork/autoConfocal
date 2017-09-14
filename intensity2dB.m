@@ -1,7 +1,7 @@
 
 function out = intensity2dB( in, direction )
 
-  k = 20;
+  k = 10;
 
   if nargin < 2
     direction = 1;

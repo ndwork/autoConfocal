@@ -37,7 +37,7 @@ function [yShear,t,inlierIndxs] = ransacYShearAndTrans( pts1, pts2, thresh )
 
     aligned1 = pts1;
     aligned1(:,1) = pts1(:,1) + t(1);
-    aligned1(:,2) = tan(yShear) * pts1(:,1) + pts1(:,2) + t(2);
+    aligned1(:,2) = yShear * pts1(:,1) + pts1(:,2) + t(2);
 
     diffs = pts2 - aligned1;
     dists = sqrt( diffs(:,1).*diffs(:,1) + diffs(:,2).*diffs(:,2) );
@@ -67,7 +67,6 @@ function [yShear,t] = findYShearAndTrans( pts1, pts2 )
   A(M+1:end,2) = 1;
   v = A \ b;
 
-  %yShear = atan( v(1) );
   yShear = v(1);
   t = v(2:3);
 end

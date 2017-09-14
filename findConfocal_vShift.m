@@ -1,5 +1,6 @@
 
-function [z0,zR] = findConfocal_vShift( bscan1, bscan2, trueZ0_mm, trueZR_mm )
+function [z0,zR] = findConfocal_vShift( bscan1, bscan2, trueZ0_mm, ...
+  trueZR_mm, dz_mm )
   % [z0,zR] = findConfocal_vShift( bscan1, bscan2, trueZ0_mm, trueZR_mm )
   % Assumes img2 and img1 are related by a vertical translation
   %
@@ -23,12 +24,10 @@ function [z0,zR] = findConfocal_vShift( bscan1, bscan2, trueZ0_mm, trueZR_mm )
   vShift = findVertShift( bscan1_dB, bscan2_dB );
 
   [z0, zR] = findConfocalParameters( bscan1, bscan2, 0, vShift, 0, ...
-    trueZ0_mm, trueZR_mm );
+    trueZ0_mm, trueZR_mm, dz_mm );
 end
 
 %thisZ0 = 512 / 2.57 * 1.4;  thisZR = 512 / 2.57 * 2*1.4*0.1;
 %thisZR = 512 / 2.57 * 2*1.4*0.1;
-
-
 
 

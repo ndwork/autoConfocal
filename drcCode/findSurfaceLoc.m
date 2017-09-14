@@ -6,18 +6,17 @@
 % Written by Nicholas Dwork (ndwork@stanford.edu) and 
 % Gennifer Smith (gsmith9@stanford.edu).
 
-function skinLoc = findSkinLoc( line )
+function skinLoc = findSurfaceLoc( line )
 
   n = numel(line);
   sortedLine =  sort(line);
   low = mean( sortedLine(1:round(0.1*n)) );
-  high = mean( sortedLine(round(0.9*n):end) );
+  high = median( sortedLine(round(0.9*n):end) );
 
-  thresh = ( high - low ) / 2 + low;
-  
+  thresh = ( high + low ) * 0.5;
+
   mask = line > thresh;
-  locs = find( line > thresh );
-  
+
   % Find the first point that is below the threshold and the first (after
   % the threshold) that is above the threshold  
   maskDiffs = diff(mask);
