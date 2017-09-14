@@ -23,11 +23,13 @@ function run_sensitivityAnalysis
   refBscan_dB = getBScans(interf);
   refBscan = intensity2dB( refBscan_dB, -1 );
 
-  z0s = zeros( numel(ts), numel(rs) );
-  zRs = zeros( numel(ts), numel(rs) );
+  z0Cells = cell( 1, numel(ts) );
+  zRCells = cell( 1, numel(ts) );
+  parfor tIndx = 1:numel(ts)
+    theseZ0s = zeros(numel(rs),1);
+    theseZRs = zeros(numel(rs),1);
 
-  for tIndx = 1:numel(ts)
-   for rIndx = 1:numel(rs)
+    for rIndx = 1:numel(rs)
       disp([ 'Working on Translation ', num2str(tIndx), ' of ', num2str(numel(ts)) ]);
       disp([ 'Working on Rotation ', num2str(rIndx), ' of ', num2str(numel(rs)) ]);
 
@@ -46,11 +48,18 @@ function run_sensitivityAnalysis
       [z0,zR] = findConfocal_yShearAndTrans( refBscan, thisBscan, ...
         [], [], dz_mm );
       close all;
-      z0s(tIndx,rIndx) = z0;
-      zRs(tIndx,rIndx) = zR;
-
+      theseZ0s(rIndx) = z0;
+      theseZRs(rIndx) = zR;
     end
+    
+    z0Cells{tIndx} = theseZ0s;
+    zRCells{tIndx} = theseZRs;
   end
 
+  z0s = cell2mat( z0Cells );  z0s_mm = z0s * dz_mm;
+  zRs = cell2mat( zRCells );  zRs_mm = zRs * dz_mm;
+
+  disp('z0s (mm):');  disp(z0s_mm);
+  disp('zRs (mm):');  disp(zRs_mm);
 end
 

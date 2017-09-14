@@ -28,8 +28,10 @@ function [z0, zR] = findConfocalParameters( bscan1, bscan2, dx, dz, shear, ...
 
   %goodThresh = -90;
   noiseFraction = 0.05;
-  %gWidth = 19;
-  gWidth = [19 9];
+  %gWidth = [19 9];
+  gWidth = 19;
+  gSig = 5;
+  maskErode = 19;
 
   noiseIndx = floor( noiseFraction*size(bscan1,1) );
   tmp = bscan1( 1:noiseIndx, : );
@@ -47,21 +49,19 @@ surfaceFeatures = [ 1:size(deBiased1,2); surfaceLocs1'; ]';
 showFeaturesOnImg( surfaceFeatures, bscan1_dB, [] );
 title( 'Surface Features Image' );
 
-  gFilter = fspecial( 'gaussian', gWidth, 5 );
+  gFilter = fspecial( 'gaussian', gWidth, gSig );
   smooth1 = imfilter( bscan1_dB, gFilter, 'replicate' );
   smooth2 = imfilter( bscan2_dB, gFilter, 'replicate' );
 
-  mask = ones( size(smooth1) );
-  mask(1:gWidth(1),:) = 0;
-  mask(end-gWidth(1)+1:end,:) = 0;
-
   smooth2 = project2onto1( smooth2, dx, dz, shear, 'linear' );
+  mask = ones( size(smooth1) );
   mask = project2onto1( mask, dx, dz, shear, 'nearest' );
   mask(1:gWidth(1),:) = 0;
+  mask(end-gWidth(1)+1:end,:) = 0;
   for i=1:numel(surfaceLocs1)
     mask(1:surfaceLocs1(i),i) = 0;
   end
-  mask = imerode( mask, strel( 'square', 19 ) );
+  mask = imerode( mask, strel( 'square', maskErode ) );
 
 figure; imshow( smooth1, [] );
 title( 'Filtered Image 1' );
@@ -78,17 +78,14 @@ title( 'Projected Image 2' );
     vShifts(-rdx+1:end) = xs(1:end+rdx)*shear + round(dz);
   end
 
-xCoord = 450;
-%xCoord = 400;
-%xCoord = 30;
+xCoord = floor( size(smooth1,2) / 2 );
 xWidth = 10;
 figure; plotnice( mean(smooth1(:,xCoord-xWidth/2:xCoord+xWidth/2),2) )
 hold on; plot( mean(smooth2(:,xCoord-xWidth/2:xCoord+xWidth/2),2), 'r', 'LineWidth', 2 )
 legend('bscan1', 'bscan2');
 
   diff_dB = smooth1 - smooth2;
-figure; imshow( diff_dB .* mask, [] )
-title('Data to fit');
+figure; imshow( diff_dB .* mask, [] ); title('Data to fit');
 
   [nY, nX] = size( smooth1 );
   z1s = (1:nY)' * ones(1,nX);
@@ -98,14 +95,15 @@ title('Data to fit');
   minImg = min( smooth1, smooth2 );
   %meanImg = (smooth1+smooth2)/2;
   %normWeights = minImg > 10;
-  normWeights = max(minImg,0);
   %normWeights = normWeights .* normWeights;  %<-- Was using this one
   %normWeights = sqrt( abs(max(meanImg,0)) );
   %normWeights = abs(diff_dB);
   %normWeights( minImg < goodThresh | mask==0 ) = 0;
+  normWeights = max(minImg,0);
   normWeights = normWeights .* mask;
+figure; plotnice( mean(normWeights,2) ); title('Norm Weights');
 
-sliver = 1;
+sliver = 0;
 if sliver == 1
   diff_dB = diff_dB(:,xCoord-xWidth/2:xCoord+xWidth/2);
   mask = mask(:,xCoord-xWidth/2:xCoord+xWidth/2);
@@ -127,7 +125,7 @@ end
   if exhaustive == 0
 
     %x0 = [ floor(0.5*nY) floor(0.25*nY) ];  % x = [z0 zR]
-    x0 = [ 0 floor(0.25*nY) ];
+    x0 = [ 0 0.5/dz_mm ];
     lb = [ -500 1 ];
     ub = [ nY+500 2*nY ];
     x = fmincon(@objective,x0,[],[],[],[],lb,ub);
@@ -166,31 +164,33 @@ hold on; plot( mean(diff_dB,2), 'r', 'LineWidth', 2 )
     z0 = z0s( minZ0Indx );
     zR = zRs( minZRIndx );
 
-    showFeaturesOnImg( [minZRIndx, minZ0Indx], costs, [], 'scale', 2, 'color', 'y' );
+    showFeaturesOnImg( [minZRIndx, minZ0Indx], costs, [], 'scale', 2, ...
+      'color', 'y' );
 
   end
 
-model1 = 10*log10( ( (z1s-z0) / zR ).^2 + 1 );
-model2 = 10*log10( ( (z2s-z0) / zR ).^2 + 1 );
-model = model2 - model1;
 
 figure; hold on;
 c = mean(diff_dB.*mask,2);
 plotnice(c,'k');
-midCol = round( size( diff_dB, 2 ) / 2 );
 if numel(trueZ0_mm) > 0
   trueZ0 = trueZ0_mm/dz_mm;
   trueZR = trueZR_mm/dz_mm;
-  trueModel1 = 10*log10( ( (z1s-trueZ0) / trueZR ).^2 + 1 );
-  trueModel2 = 10*log10( ( (z2s-trueZ0) / trueZR ).^2 + 1 );
+  trueModel1 = intensity2dB( ( (z1s-trueZ0) / trueZR ).^2 + 1 );
+  trueModel2 = intensity2dB( ( (z2s-trueZ0) / trueZR ).^2 + 1 );
   answer = trueModel2 - trueModel1;
-  plot( answer(:,midCol), 'b', 'LineWidth', 2 );
+  answer = mean( answer .* mask, 2 );
+  plot( answer, 'b', 'LineWidth', 2 );
 end
-plot( model(:,midCol), 'r', 'LineWidth', 2 );
+
+model1 = intensity2dB( ( (z1s-z0) / zR ).^2 + 1 );
+model2 = intensity2dB( ( (z2s-z0) / zR ).^2 + 1 );
+model = model2 - model1;
+plot( mean(model,2), 'r', 'LineWidth', 2 );
 legend('data','answer','model');
+
 disp(['z0(mm): ', num2str(z0*dz_mm)]);
 disp(['apparent zR(mm): ', num2str(zR*dz_mm)]);
-figure; plotnice( normWeights(:,midCol) ); title('Norm Weights');
 end
 
 

@@ -19,15 +19,15 @@ function [z0,zR] = findConfocal_yShearAndTrans( bscan1, bscan2, ...
   % purpose.
 
   % Function parameters
-  gSmooth = 5;
+  gSig = 5;
   gWidth = 19;
-  searchPercentage = 0.8;
+  searchPercentage = 0.9;
   ransacThresh = 5;  % pixels
 
   bscan1_dB = intensity2dB( bscan1 );
   bscan2_dB = intensity2dB( bscan2 );
 
-  h = fspecial('gaussian', gWidth, gSmooth);
+  h = fspecial('gaussian', gWidth, gSig);
   smooth1 = imfilter( bscan1_dB, h, 'symmetric', 'same' );
   smooth2 = imfilter( bscan2_dB, h, 'symmetric', 'same' );
 

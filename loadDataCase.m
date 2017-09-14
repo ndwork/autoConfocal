@@ -18,7 +18,9 @@ function [bscan1,bscan2,dz_mm,noisePower,trans,trueZ0_mm,trueZR_mm] = ...
     case 1
       % structured phantom with vertical shift
       trueZ0_mm = 0.86;  % mm
-      trueZR_mm = 0.29;  % mm
+      trueZr_mm = 0.21/2;  % mm
+      n = 1.4;  % index of refraction in sample
+      trueZR_mm = trueZr_mm * 2 * n;
       file1 = [mainDir,'/20160922_layeredPhantom/set3_withoutHoles/phantom_raw_27.raw'];
       file2 = [mainDir,'/20160922_layeredPhantom/set3_withoutHoles/phantom_raw_29.raw'];
       dz_mm = 2.57/512;
@@ -32,7 +34,9 @@ function [bscan1,bscan2,dz_mm,noisePower,trans,trueZ0_mm,trueZR_mm] = ...
     case 2
       % structured phantom with vertical shift
       trueZ0_mm = 1.24;  % mm
-      trueZR_mm = 0.29;  % mm
+      trueZr_mm = 0.21/2;  % mm
+      n = 1.4;  % index of refraction in sample
+      trueZR_mm = trueZr_mm * 2 * n;
       file1 = [mainDir,'/20160922_layeredPhantom/set4/flat/phantom_raw_0.raw'];
       file2 = [mainDir,'/20160922_layeredPhantom/set4/flat/phantom_raw_5.raw'];
       [interf1,info1] = getInterferograms(file1,options);
@@ -46,7 +50,9 @@ function [bscan1,bscan2,dz_mm,noisePower,trans,trueZ0_mm,trueZR_mm] = ...
     case 3
       % structured phantom with vertical shift
       trueZ0_mm = 1.35;   % mm
-      trueZR_mm = 0.29;  % mm
+      trueZr_mm = 0.21/2;  % mm
+      n = 1.4;  % index of refraction in sample
+      trueZR_mm = trueZr_mm * 2 * n;
       file1 = [mainDir,'/20160922_layeredPhantom/set5/phantom_raw_41.raw'];
       file2 = [mainDir,'/20160922_layeredPhantom/set5/phantom_raw_45.raw'];
       [interf1,info1] = getInterferograms(file1,options);
@@ -60,7 +66,9 @@ function [bscan1,bscan2,dz_mm,noisePower,trans,trueZ0_mm,trueZR_mm] = ...
     case 4
       % structured phantom with shift and rotation
       trueZ0_mm = 1.7;   % mm
-      trueZR_mm = 0.29;  % mm
+      trueZr_mm = 0.21/2;  % mm
+      n = 1.4;  % index of refraction in sample
+      trueZR_mm = trueZr_mm * 2 * n;
       file1 = [mainDir,'/20160922_layeredPhantom/set5/phantom_raw_41.raw'];
       file2 = [mainDir,'/20160922_layeredPhantom/set5/phantom_raw_34.raw'];
       [interf1,info1] = getInterferograms(file1,options);
@@ -75,6 +83,10 @@ function [bscan1,bscan2,dz_mm,noisePower,trans,trueZ0_mm,trueZR_mm] = ...
 
     case 5
       % structured phantom with shift and rotation
+      trueZ0_mm = 0;   % mm
+      trueZr_mm = 0.21/2;  % mm
+      n = 1.4;  % index of refraction in sample
+      trueZR_mm = trueZr_mm * 2 * n;
       file1 = [mainDir,'/20161003_layeredPhantom/set1/phantom_raw_16.raw'];
       file2 = [mainDir,'/20161003_layeredPhantom/set1/phantom_raw_07.raw'];
       [interf1,info1] = getInterferograms(file1,options);
@@ -88,7 +100,9 @@ function [bscan1,bscan2,dz_mm,noisePower,trans,trueZ0_mm,trueZR_mm] = ...
     case 6
       % structured phantom with shift and rotation
       trueZ0_mm = 1.35;   % mm
-      trueZR_mm = 0.29;  % mm
+      trueZr_mm = 0.21/2;  % mm
+      n = 1.4;  % index of refraction in sample
+      trueZR_mm = trueZr_mm * 2 * n;
       file1 = [mainDir,'/20161003_layeredPhantom/set2/phantom_raw_01.raw'];
       file2 = [mainDir,'/20161003_layeredPhantom/set2/phantom_raw_21.raw'];
       [interf1,info1] = getInterferograms(file1,options);
@@ -103,7 +117,9 @@ function [bscan1,bscan2,dz_mm,noisePower,trans,trueZ0_mm,trueZR_mm] = ...
     case 7
       % structured phantom with shift and rotation
       trueZ0_mm = 1.03;  % mm
-      trueZR_mm = 0.29;  % mm
+      trueZr_mm = 0.21/2;  % mm
+      n = 1.4;  % index of refraction in sample
+      trueZR_mm = trueZr_mm * 2 * n;
       file1 = [mainDir,'/20161003_layeredPhantom/set3/phantom_raw_00.raw'];
       file2 = [mainDir,'/20161003_layeredPhantom/set3/phantom_raw_16.raw'];
       [interf1,info1] = getInterferograms(file1,options);
@@ -119,8 +135,10 @@ function [bscan1,bscan2,dz_mm,noisePower,trans,trueZ0_mm,trueZR_mm] = ...
 
     case 8
       % structured phantom with shift and rotation
-      trueZ0_mm = 0.9;   % mm
-      trueZR_mm = 0.29;  % mm
+      trueZ0_mm = 1.56;   % mm
+      trueZr_mm = 0.21/2;  % mm
+      n = 1.4;  % index of refraction in sample
+      trueZR_mm = trueZr_mm * 2 * n;
       file1 = [mainDir,'/20161005_layeredPhantom/set1/phantom_raw_1.raw'];
       file2 = [mainDir,'/20161005_layeredPhantom/set1/phantom_raw_20.raw'];
       %file2 = [mainDir,'/20161005_layeredPhantom/set1/phantom_raw_23.raw'];
@@ -209,7 +227,9 @@ bscan2_dB = bscan2_dB(1:400,:);
     case 12
       % Rabbit outer eye
       trueZ0_mm = 0.7;   % mm
-      trueZR_mm = 0.29;  % mm
+      trueZr_mm = 0.21/2;  % mm
+      n = 1.4;  % index of refraction in sample
+      trueZR_mm = trueZr_mm * 2 * n;
       file2 = [mainDir,'/20170215_rabbit/outerEye/flat/phantom_raw_68.raw'];
       file1 = [mainDir,'/20170215_rabbit/outerEye/rotated/phantom_raw_86.raw'];
       [interf1,info1] = getInterferograms(file1,options);
@@ -226,7 +246,9 @@ bscan2_dB = bscan2_dB(1:400,:);
     case 13
       % layered phantom with vertical shift
       trueZ0_mm = 1.1;  % mm
-      trueZR_mm = 0.29;  % mm
+      trueZr_mm = 0.21/2;  % mm
+      n = 1.4;  % index of refraction in sample
+      trueZR_mm = trueZr_mm * 2 * n;
       file1 = [mainDir,'/20160106_focalPlane/phantom_2/phantom_raw_4.raw'];
       file2 = [mainDir,'/20160106_focalPlane/phantom_2/phantom_raw_9.raw'];
       dz_mm = 2.57/512;
@@ -241,8 +263,10 @@ bscan2_dB = bscan2_dB(1:400,:);
 
     case 14
       % structured phantom with shift and rotation
-      trueZ0_mm = 1.2;   % mm
-      trueZR_mm = 0.28;  % mm
+      trueZ0_mm = 1.56;   % mm
+      trueZr_mm = 0.21/2;  % mm
+      n = 1.4;  % index of refraction in sample
+      trueZR_mm = trueZr_mm * 2 * n;
       file1 = [mainDir,'/20170912_sensitivityAnalysis/translation_0/angle_0/OCTData_03.raw'];
       file2 = [mainDir,'/20170912_sensitivityAnalysis/translation_0/angle_0/OCTData_09.raw'];
       [interf1,info1] = getInterferograms(file1,options);
@@ -251,8 +275,8 @@ bscan2_dB = bscan2_dB(1:400,:);
       [interf2,info2] = getInterferograms(file2,options);
       bscan2_dB = getBScans(interf2);
       dz_mm = 2.57/size(bscan1_dB,1);
-%bscan1_dB = bscan1_dB(1:400,:);
-%bscan2_dB = bscan2_dB(1:400,:);
+      bscan1_dB = bscan1_dB(10:end-30,:);
+      bscan2_dB = bscan2_dB(10:end-30,:);
       noisePower = (0.5d-2)^2;
       trans = 'yShearAndTrans';
   end

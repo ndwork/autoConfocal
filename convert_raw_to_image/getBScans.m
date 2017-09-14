@@ -31,8 +31,8 @@ function bscan = get2DScans(interf)
   load FFTM	%This file actually contains both the forward and inverse matrices, but usually we only need the forward (so the filesize can be reduced if necessary)
   NDFT = TempFFTM(1:FFT_length/2,:)*interf; %compute DFT for first 512 freq indices
 
-  bscan = intensity2dB( abs(NDFT) );
-  %bscan = 20*log10( abs(NDFT) );
+  bscan = 20*log10( abs(NDFT) );
+  %bscan = intensity2dB( abs(NDFT) );
 end
 
 function bscan = get3DScans(interf,NW)
@@ -51,7 +51,7 @@ function bscan = get3DScans(interf,NW)
       disp(['Making scan line ', num2str(n), ' of ', num2str(sz(1))]);
     end
     NDFT = halfNW * squeeze(interf(n,:,:))';
-    bscan(n,:,:) = intensity2dB( abs(NDFT') );
+    bscan(n,:,:) = 20*log10( abs(NDFT') );
   end
 end
 
