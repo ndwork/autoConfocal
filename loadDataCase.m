@@ -135,25 +135,28 @@ function [bscan1,bscan2,dz_mm,noisePower,trans,trueZ0_mm,trueZR_mm] = ...
 
     case 8
       % structured phantom with shift and rotation
-      trueZ0_mm = 1.56;   % mm
+      trueZ0_mm = 1.15;   % mm
       trueZr_mm = 0.21/2;  % mm
       n = 1.4;  % index of refraction in sample
       trueZR_mm = trueZr_mm * 2 * n;
-      file1 = [mainDir,'/20161005_layeredPhantom/set1/phantom_raw_1.raw'];
-      file2 = [mainDir,'/20161005_layeredPhantom/set1/phantom_raw_20.raw'];
-      %file2 = [mainDir,'/20161005_layeredPhantom/set1/phantom_raw_23.raw'];
+      %file1 = [mainDir,'/20161005_layeredPhantom/set1/phantom_raw_1.raw'];
+      %file2 = [mainDir,'/20161005_layeredPhantom/set1/phantom_raw_20.raw'];
+      %file1 = [mainDir,'/20161005_layeredPhantom/set1/phantom_raw_2.raw'];
+      %file2 = [mainDir,'/20161005_layeredPhantom/set1/phantom_raw_25.raw'];
+      %file1 = [mainDir,'/20161005_layeredPhantom/set1/phantom_raw_03.raw'];
+      %file2 = [mainDir,'/20161005_layeredPhantom/set1/phantom_raw_27.raw'];
+      file2 = [mainDir,'/20161003_layeredPhantom/set1/phantom_raw_08.raw'];
+      file1 = [mainDir,'/20161003_layeredPhantom/set1/phantom_raw_18.raw'];
       [interf1,info1] = getInterferograms(file1,options);
       bscan1_dB = getBScans(interf1);
       %bscan1_dB = bscan1_dB(1:400,:);
       [interf2,info2] = getInterferograms(file2,options);
       bscan2_dB = getBScans(interf2);
       dz_mm = 2.57/size(bscan1_dB,1);
-bscan1_dB = bscan1_dB(1:400,:);
-bscan2_dB = bscan2_dB(1:400,:);
-      %bscan2_dB = bscan2_dB(1:400,:);
+%bscan1_dB = bscan1_dB(1:400,:);
+%bscan2_dB = bscan2_dB(1:400,:);
       %noisePower = (0.5d-2)^2;
-      %noisePower = 100000000;
-      noisePower = 1;
+      noisePower = (1d6)^2;
       trans = 'yShearAndTrans';
 
     case 9
@@ -196,7 +199,7 @@ bscan2_dB = bscan2_dB(1:400,:);
       bscan2_dB = bscan2_dB / 4;
 
       noisePower = (0.5d-2)^2;
-      trans = 'vShift';
+      trans = 'yShearAndTrans';
 
     case 11
       % Zeiss data from Dr. Leng
@@ -237,10 +240,8 @@ bscan2_dB = bscan2_dB(1:400,:);
       [interf2,info2] = getInterferograms(file2,options);
       bscan2_dB = getBScans(interf2);
       dz_mm = 2.57/size(bscan1_dB,1);
-      %bscan1_dB = bscan1_dB(1:400,:);
-      %bscan2_dB = bscan2_dB(1:400,:);
-      noisePower = (0.5d-2)^2;
-      %noisePower = 100000000;
+      %noisePower = (0.5d-2)^2;
+      noisePower = (1d6)^2;
       trans = 'yShearAndTrans';
 
     case 13
@@ -267,8 +268,10 @@ bscan2_dB = bscan2_dB(1:400,:);
       trueZr_mm = 0.21/2;  % mm
       n = 1.4;  % index of refraction in sample
       trueZR_mm = trueZr_mm * 2 * n;
-      file1 = [mainDir,'/20170912_sensitivityAnalysis/translation_0/angle_0/OCTData_03.raw'];
-      file2 = [mainDir,'/20170912_sensitivityAnalysis/translation_0/angle_0/OCTData_09.raw'];
+      %file1 = [mainDir,'/20170912_sensitivityAnalysis/translation_0/angle_10/OCTData_75.raw'];
+      %file2 = [mainDir,'/20170912_sensitivityAnalysis/translation_0/angle_-10/OCTData_46.raw'];
+      file1 = [mainDir,'/20170912_sensitivityAnalysis/translation_0/angle_-10/OCTData_39.raw'];
+      file2 = [mainDir,'/20170912_sensitivityAnalysis/translation_-1/angle_0/OCTData_09.raw'];
       [interf1,info1] = getInterferograms(file1,options);
       bscan1_dB = getBScans(interf1);
       %bscan1_dB = bscan1_dB(1:400,:);
@@ -277,7 +280,8 @@ bscan2_dB = bscan2_dB(1:400,:);
       dz_mm = 2.57/size(bscan1_dB,1);
       bscan1_dB = bscan1_dB(10:end-30,:);
       bscan2_dB = bscan2_dB(10:end-30,:);
-      noisePower = (0.5d-2)^2;
+      %noisePower = (0.5d-2)^2;
+      noisePower = (1d6)^2;
       trans = 'yShearAndTrans';
   end
 

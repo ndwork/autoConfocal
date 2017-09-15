@@ -53,6 +53,11 @@ title( 'Surface Features Image' );
   smooth1 = imfilter( bscan1_dB, gFilter, 'replicate' );
   smooth2 = imfilter( bscan2_dB, gFilter, 'replicate' );
 
+figure; imshow( smooth1, [] );
+title( 'Filtered Image 1' );
+figure; imshow( smooth2, [] );
+title( 'Filtered Image 2' );
+
   smooth2 = project2onto1( smooth2, dx, dz, shear, 'linear' );
   mask = ones( size(smooth1) );
   mask = project2onto1( mask, dx, dz, shear, 'nearest' );
@@ -63,12 +68,12 @@ title( 'Surface Features Image' );
   end
   mask = imerode( mask, strel( 'square', maskErode ) );
 
-figure; imshow( smooth1, [] );
-title( 'Filtered Image 1' );
 figure; imshow( smooth2, [min(smooth1(:)) max(smooth1(:))] );
 title( 'Projected Image 2' );
 
-  xs = 1:size(bscan1,2);
+  sBScan = size(bscan1);
+  midX = ceil( (sBScan(2)+1)/2 );
+  xs = (1:sBScan(2)) - midX;
   vShifts = zeros(1,size(bscan1,2));
   %vShifts is the amount the focal plane is shifted up in every column of 2
   rdx = round(dx);
