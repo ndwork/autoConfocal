@@ -28,7 +28,8 @@ function [bscan1,bscan2,dz_mm,noisePower,trans,trueZ0_mm,trueZR_mm] = ...
       bscan1_dB = getBScans(interf1);
       [interf2,info2] = getInterferograms(file2,options);
       bscan2_dB = getBScans(interf2);
-      noisePower = (0.5d-2)^2;
+      %noisePower = (0.5d-2)^2;
+      noisePower = (1d5)^2;
       trans = 'vShift';
 
     case 2
@@ -44,7 +45,8 @@ function [bscan1,bscan2,dz_mm,noisePower,trans,trueZ0_mm,trueZR_mm] = ...
       [interf2,info2] = getInterferograms(file2,options);
       bscan2_dB = getBScans(interf2);
       dz_mm = 2.57/size(bscan1_dB,1);
-      noisePower = (0.5d-2)^2;
+      %noisePower = (0.5d-2)^2;
+      noisePower = (1d5)^2;
       trans = 'vShift';
 
     case 3
@@ -60,7 +62,8 @@ function [bscan1,bscan2,dz_mm,noisePower,trans,trueZ0_mm,trueZR_mm] = ...
       [interf2,info2] = getInterferograms(file2,options);
       bscan2_dB = getBScans(interf2);
       dz_mm = 2.57/size(bscan1_dB,1);
-      noisePower = (0.5d-2)^2;
+      %noisePower = (0.5d-2)^2;
+      noisePower = (1d5)^2;
       trans = 'vShift';
 
     case 4
@@ -77,8 +80,8 @@ function [bscan1,bscan2,dz_mm,noisePower,trans,trueZ0_mm,trueZR_mm] = ...
       bscan2_dB = getBScans(interf2);
       dz_mm = 2.57/size(bscan1_dB,1);
       %noisePower = (0.5d-2)^2;
-      %noisePower = (1d-1)^2;
-      noisePower = 10000000;
+      %noisePower = 10000000;
+      noisePower = (1d5)^2;
       trans = 'yShearAndTrans';
 
     case 5
@@ -94,7 +97,8 @@ function [bscan1,bscan2,dz_mm,noisePower,trans,trueZ0_mm,trueZR_mm] = ...
       [interf2,info2] = getInterferograms(file2,options);
       bscan2_dB = getBScans(interf2);
       dz_mm = 2.57/size(bscan1_dB,1);
-      noisePower = (0.5d-2)^2;
+      %noisePower = (0.5d-2)^2;
+      noisePower = (1d5)^2;
       trans = 'yShearAndTrans';
       
     case 6
@@ -110,8 +114,8 @@ function [bscan1,bscan2,dz_mm,noisePower,trans,trueZ0_mm,trueZR_mm] = ...
       [interf2,info2] = getInterferograms(file2,options);
       bscan2_dB = getBScans(interf2);
       dz_mm = 2.57/size(bscan1_dB,1);
-      noisePower = (0.5d-2)^2;
-      %noisePower = (1d-1)^2;
+      %noisePower = (0.5d-2)^2;
+      noisePower = (1d5)^2;
       trans = 'yShearAndTrans';
 
     case 7
@@ -130,7 +134,7 @@ function [bscan1,bscan2,dz_mm,noisePower,trans,trueZ0_mm,trueZR_mm] = ...
       dz_mm = 2.57/size(bscan1_dB,1);
       %bscan2_dB = bscan2_dB(1:400,:);
       %noisePower = (0.5d-2)^2;
-      noisePower = (1d-1)^2;
+      noisePower = (1d5)^2;
       trans = 'yShearAndTrans';
 
     case 8
@@ -156,7 +160,7 @@ function [bscan1,bscan2,dz_mm,noisePower,trans,trueZ0_mm,trueZR_mm] = ...
 %bscan1_dB = bscan1_dB(1:400,:);
 %bscan2_dB = bscan2_dB(1:400,:);
       %noisePower = (0.5d-2)^2;
-      noisePower = (1d6)^2;
+      noisePower = (1d5)^2;
       trans = 'yShearAndTrans';
 
     case 9
@@ -241,7 +245,7 @@ function [bscan1,bscan2,dz_mm,noisePower,trans,trueZ0_mm,trueZR_mm] = ...
       bscan2_dB = getBScans(interf2);
       dz_mm = 2.57/size(bscan1_dB,1);
       %noisePower = (0.5d-2)^2;
-      noisePower = (1d6)^2;
+      noisePower = (1d5)^2;
       trans = 'yShearAndTrans';
 
     case 13
@@ -259,7 +263,8 @@ function [bscan1,bscan2,dz_mm,noisePower,trans,trueZ0_mm,trueZR_mm] = ...
       bscan2_dB = getBScans(interf2);
       bscan1_dB = bscan1_dB(1:400,:);
       bscan2_dB = bscan2_dB(1:400,:);
-      noisePower = (0.5d-2)^2;
+      %noisePower = (0.5d-2)^2;
+      noisePower = (1d5)^2;
       trans = 'vShift';
 
     case 14
@@ -281,7 +286,7 @@ function [bscan1,bscan2,dz_mm,noisePower,trans,trueZ0_mm,trueZR_mm] = ...
       bscan1_dB = bscan1_dB(10:end-30,:);
       bscan2_dB = bscan2_dB(10:end-30,:);
       %noisePower = (0.5d-2)^2;
-      noisePower = (1d6)^2;
+      noisePower = (1d5)^2;
       trans = 'yShearAndTrans';
   end
 

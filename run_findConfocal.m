@@ -4,9 +4,9 @@ function run_findConfocal
   addpath(genpath(pwd))
 
   %datacase =  8;  % Structured phantom with rotation and translation
-  %datacase = 11;  % Zeiss retina
+  datacase = 11;  % Zeiss retina
   %datacase = 12;  % Rabbit eye
-  datacase = 14;  % Sensitivity analysis phantom
+  %datacase = 14;  % Sensitivity analysis phantom
   [bscan1,bscan2,dz_mm,noisePower,trans,trueZ0_mm,trueZR_mm] = ...
     loadDataCase( datacase );
 
@@ -55,5 +55,15 @@ function run_findConfocal
     disp(['NFL Median Mu: ', num2str(median(nflMus))]);
   end
 
+  if datacase == 14
+    % find the median attenuation coefficient of the first and second
+    % layers
+    segLayer1 = muFit( 67:117, 18:224 );
+    med1 = median(segLayer1(:));
+    disp(['Median of layer 1: ', num2str(med1)]);
+    segLayer2 = muFit(137:225,266:384);
+    med2 = median(segLayer2(:));
+    disp(['Median of layer 2: ', num2str(med2)]);
+  end
 end
 
