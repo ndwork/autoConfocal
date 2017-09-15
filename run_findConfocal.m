@@ -3,9 +3,10 @@ function run_findConfocal
   clear; close all; rng(1);
   addpath(genpath(pwd))
 
-  %datacase = 8;
-  %datacase = 12;
-  datacase = 14;
+  datacase = 8;  % Structured phantom with rotation and translation
+  %datacase = 11;  % Zeiss retina
+  %datacase = 12;  % Rabbit eye
+  %datacase = 14;  % Sensitivity analysis phantom
   [bscan1,bscan2,dz_mm,noisePower,trans,trueZ0_mm,trueZR_mm] = ...
     loadDataCase( datacase );
 
@@ -39,6 +40,19 @@ function run_findConfocal
   tic;
   muFit = muFit2D_DRC( bscan1, z_mm, z0_mm, zR_mm, noisePower );
   toc
-  figure; imshow( muFit, [0 3.0] );
+  figure; imshow( muFit, [0 5.0] );
+
+  if datacase == 11
+    % find the attenuation coefficient of the nerve fiber layer
+    mask = muFit > 2;
+    mask = imdilate( mask, strel( 'square', 8 ) );
+    mask = imerode( mask, strel( 'square', 10 ) );
+    regions = bwlabel( mask );
+    nflRegionIndx = regions(348,20);
+    nflMus = muFit( regions == nflRegionIndx );
+    disp(['NFL Mean Mu: ', num2str(mean(nflMus))]);
+    disp(['NFL Median Mu: ', num2str(median(nflMus))]);
+  end
+
 end
 

@@ -30,6 +30,7 @@ function run_sensitivityAnalysis
     theseZRs = zeros(numel(rs),1);
 
     for rIndx = 1:numel(rs)
+      rng(2);
       disp([ 'Working on Translation ', num2str(tIndx), ' of ', num2str(numel(ts)) ]);
       disp([ 'Working on Rotation ', num2str(rIndx), ' of ', num2str(numel(rs)) ]);
 

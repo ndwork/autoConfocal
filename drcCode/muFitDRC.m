@@ -11,8 +11,8 @@ function mu = muFitDRC( I, z, h, noisePower )
 
   dz = z(2) - z(1);
 
-  f = 1 ./ h .* ( I.*I ./ (I.*I + noisePower ) );
-  term = I .* f;
+  Hres = 1 ./ h .* ( I.*I ./ (I.*I + noisePower ) );
+  term = I .* Hres;
 
   nTerm = numel(term);
   integral = zeros(nTerm,1);
@@ -20,9 +20,8 @@ function mu = muFitDRC( I, z, h, noisePower )
     integral(m) = sum( term(m:end-1) );
   end
 
-  mu = (.5/dz)*(term./integral);
+  mu = (.5/dz) * (term./integral);
   %mu = 0.5/dz * log( 1 + term./integral );
 
   mu( ~isfinite(mu) ) = 0;
 end
-
