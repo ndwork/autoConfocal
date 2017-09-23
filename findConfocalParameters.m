@@ -1,6 +1,6 @@
 
-function [z0, zR] = findConfocalParameters( bscan1, bscan2, dx, dz, shear, ...
-  trueZ0_mm, trueZR_mm, dz_mm )
+function [z0, zR, overlap_mmSq] = findConfocalParameters( bscan1, bscan2, ...
+  dx, dz, shear, trueZ0_mm, trueZR_mm, dx_mm, dz_mm )
   % [z0, zR] = findConfocalParameters( img1, img2, dx, dz, shear )
   %
   % Determines the confocal function parameters assuming that the only
@@ -91,6 +91,9 @@ legend('bscan1', 'bscan2');
 
   diff_dB = smooth1 - smooth2;
 figure; imshow( diff_dB .* mask, [] ); title('Data to fit');
+
+  overlap_mmSq = sum(mask(:)) * dx_mm * dz_mm;
+disp(['The amount of overlap is (mm^2): ', num2str(overlap_mmSq)]);
 
   [nY, nX] = size( smooth1 );
   z1s = (1:nY)' * ones(1,nX);

@@ -1,6 +1,6 @@
 
-function [z0,zR] = findConfocal_yShearAndTrans( bscan1, bscan2, ...
-  trueZ0_mm, trueZR_mm, dz_mm )
+function [z0,zR,overlap] = findConfocal_yShearAndTrans( bscan1, bscan2, ...
+  trueZ0_mm, trueZR_mm, dx_mm, dz_mm )
   % [z0,zR] = findConfocal_yShearAndTrans( bscan1, bscan2 )
   %
   % Inputs:
@@ -56,8 +56,8 @@ function [z0,zR] = findConfocal_yShearAndTrans( bscan1, bscan2, ...
     yShear = atan( rotation );
   end
 
-  [z0, zR] = findConfocalParameters( bscan1, bscan2, hShift, vShift, yShear, ...
-    trueZ0_mm, trueZR_mm, dz_mm );
+  [z0, zR, overlap] = findConfocalParameters( bscan1, bscan2, ...
+    hShift, vShift, yShear, trueZ0_mm, trueZR_mm, dx_mm, dz_mm );
 end
 
 
