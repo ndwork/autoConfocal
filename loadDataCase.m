@@ -4,8 +4,8 @@ function [bscan1,bscan2,dx_mm,dz_mm,noisePower,trans,trueZ0_mm,trueZR_mm] = ...
 
   if exist( '/Volumes/Seagate2TB/Data/OCTdata/autoConfocal/', 'dir' )
     mainDir = '/Volumes/Seagate2TB/Data/OCTdata/autoConfocal/';
-  elseif exist( '/Volumes/ndwork16GB/octData/', 'dir' ) 
-    mainDir = '/Volumes/ndwork16GB/octData/';
+  elseif exist( '/Volumes/ndwork128GB/octData/', 'dir' ) 
+    mainDir = '/Volumes/ndwork128GB/octData/';
   else
     error('Could not find main directory');
   end
@@ -246,7 +246,7 @@ function [bscan1,bscan2,dx_mm,dz_mm,noisePower,trans,trueZ0_mm,trueZR_mm] = ...
       % Rabbit outer eye
       trueZ0_mm = 0.7;   % mm
       trueZr_mm = 0.21/2;  % mm
-      n = 1.4;  % index of refraction in sample
+      n = 1.37;  % index of refraction in sample
       trueZR_mm = trueZr_mm * 2 * n;
       file2 = [mainDir,'/20170215_rabbit/outerEye/flat/phantom_raw_68.raw'];
       file1 = [mainDir,'/20170215_rabbit/outerEye/rotated/phantom_raw_86.raw'];
@@ -292,7 +292,48 @@ function [bscan1,bscan2,dx_mm,dz_mm,noisePower,trans,trueZ0_mm,trueZR_mm] = ...
       file2 = [mainDir,'/20170912_sensitivityAnalysis/translation_-1/angle_0/OCTData_09.raw'];
       [interf1,info1] = getInterferograms(file1,options);
       bscan1_dB = getBScans(interf1);
-      %bscan1_dB = bscan1_dB(1:400,:);
+      [interf2,info2] = getInterferograms(file2,options);
+      bscan2_dB = getBScans(interf2);
+      dx_mm = 2.57/size(bscan1_dB,2);
+      dz_mm = 2.57/size(bscan1_dB,1);
+      bscan1_dB = bscan1_dB(10:end-30,:);
+      bscan2_dB = bscan2_dB(10:end-30,:);
+      %noisePower = (0.5d-2)^2;
+      noisePower = (1d5)^2;
+      trans = 'yShearAndTrans';
+
+    case 15
+      % structured phantom with shift and rotation
+      trueZ0_mm = 1.56;   % mm
+      trueZr_mm = 0.21/2;  % mmOCTData_0.raw
+      n = 1.4;  % index of refraction in sample
+      trueZR_mm = trueZr_mm * 2 * n;
+      %file1 = [mainDir,'/20170912_sensitivityAnalysis/translation_0/angle_10/OCTData_75.raw'];
+      %file2 = [mainDir,'/20170912_sensitivityAnalysis/translation_0/angle_-10/OCTData_46.raw'];
+      file1 = [mainDir,'/20170912_sensitivityAnalysis/translation_0/angle_-10/OCTData_40.raw'];
+      file2 = [mainDir,'/20170912_sensitivityAnalysis/translation_-1/angle_0/OCTData_11.raw'];
+      [interf1,info1] = getInterferograms(file1,options);
+      bscan1_dB = getBScans(interf1);
+      [interf2,info2] = getInterferograms(file2,options);
+      bscan2_dB = getBScans(interf2);
+      dx_mm = 2.57/size(bscan1_dB,2);
+      dz_mm = 2.57/size(bscan1_dB,1);
+      bscan1_dB = bscan1_dB(10:end-30,:);
+      bscan2_dB = bscan2_dB(10:end-30,:);
+      %noisePower = (0.5d-2)^2;
+      noisePower = (1d5)^2;
+      trans = 'yShearAndTrans';
+      
+    case 16
+      % Just noise
+      file1 = [mainDir,'/20171215_responseToReviewers/noiseData/OCTData_0.raw'];
+      file2 = file1;
+      trueZ0_mm = 1.56;   % mm
+      trueZr_mm = 0.21/2;  % mmOCTData_0.raw
+      n = 1.4;  % index of refraction in sample
+      trueZR_mm = trueZr_mm * 2 * n;
+      [interf1,info1] = getInterferograms(file1,options);
+      bscan1_dB = getBScans(interf1);
       [interf2,info2] = getInterferograms(file2,options);
       bscan2_dB = getBScans(interf2);
       dx_mm = 2.57/size(bscan1_dB,2);
