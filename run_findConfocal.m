@@ -37,12 +37,10 @@ function run_findConfocal
   disp(['True zR (mm): ', num2str(trueZR_mm) ]);
 
   bscan1_dB = intensity2dB( bscan1 );
-  figure; imshownice( bscan1_dB );
-  title('B-Scan 1 in dB');
+  figure; imshownice( bscan1_dB ); title('B-Scan 1 in dB');
 
   bscan2_dB = intensity2dB( bscan2 );
-  figure; imshownice( bscan2_dB );
-  title('B-Scan 2 in dB');
+  figure; imshownice( bscan2_dB ); title('B-Scan 2 in dB');
 
 
   tic;
