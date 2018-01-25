@@ -1,11 +1,13 @@
 
-function [z0,zR,overlap] = findConfocal_yShearAndTrans( bscan1, bscan2, ...
-  trueZ0_mm, trueZR_mm, dx_mm, dz_mm )
+function [z0,zR,overlap,vShift,hShift,yShear] = findConfocal_yShearAndTrans( ...
+  bscan1, bscan2, lambda0, deltaLambda, dLambda, trueZ0_mm, trueZR_mm, dx_mm, dz_mm )
   % [z0,zR] = findConfocal_yShearAndTrans( bscan1, bscan2 )
   %
   % Inputs:
   % bscan1 - first b-scan
   % bscan2 - second b-scan
+  % lambda0, deltaLambda, and dLambda are fall-off parameters.  See the
+  % makeFalloffFunction for details.
   %
   % Outputs:
   % z0 - the focal plane location (in pixels)
@@ -61,11 +63,8 @@ function [z0,zR,overlap] = findConfocal_yShearAndTrans( bscan1, bscan2, ...
     yShear = atan( rotation );
   end
 
-  [z0, zR, overlap] = findConfocalParameters( bscan1, bscan2, ...
-    hShift, vShift, yShear, trueZ0_mm, trueZR_mm, dx_mm, dz_mm );
+  [z0, zR, overlap] = findConfocalParameters( bscan1, bscan2, hShift, vShift, yShear, ...
+    lambda0, deltaLambda, dLambda, trueZ0_mm, trueZR_mm, dx_mm, dz_mm );
 end
-
-
-
 
 

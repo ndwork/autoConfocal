@@ -3,24 +3,24 @@ function run_findConfocal
   clear; close all; rng(1);
   addpath(genpath(pwd))
 
-  %datacase =  1;  % Structured phantom with rotation and translation
-  datacase = 11;  % Zeiss retina
-  %datacase = 12;  % Rabbit eye
-  %datacase = 14;   % Structured phantom 2 (of sensitivity analysis ) 
+  %datacase = 11;  % Zeiss retina
+  datacase = 12;  % Rabbit eye
+  %datacase = 14;  % Structured phantom 2 (of sensitivity analysis ) 
                    % with rotation and translation
   %datacase = 15;  % Sensitivity analysis phantom
   %datacase = 16;  % Just noise
-  [bscan1,bscan2,dx_mm,dz_mm,noisePower,trans,trueZ0_mm,trueZR_mm] = ...
-    loadDataCase( datacase );
+  %datacase = 17;  % Focal plane high above sample
+  [ bscan1, bscan2, dx_mm, dz_mm, noisePower, lambda0, deltaLambda, dLambda, ...
+    trans,trueZ0_mm,trueZR_mm ] = loadDataCase( datacase );
 
   switch trans
     case 'vShift'
-      [z0,zR] = findConfocal_vShift( bscan1, bscan2, ...
+      [z0,zR] = findConfocal_vShift( bscan1, bscan2, lambda0, deltaLambda, dLambda, ...
         trueZ0_mm, trueZR_mm, dx_mm, dz_mm );
     case 'vShiftRot'
-      [z0,zR] = findConfocal_vShiftRot( bscan1, bscan2 );
+      [z0,zR] = findConfocal_vShiftRot( bscan1, bscan2, lambda0, deltaLambda, dLambda );
     case 'yShearAndTrans'
-      [z0,zR] = findConfocal_yShearAndTrans( bscan1, bscan2, ...
+      [z0,zR] = findConfocal_yShearAndTrans( bscan1, bscan2, lambda0, deltaLambda, dLambda, ...
         trueZ0_mm, trueZR_mm, dx_mm, dz_mm );
   end
 

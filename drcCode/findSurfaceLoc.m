@@ -21,4 +21,5 @@ function skinLoc = findSurfaceLoc( line )
   mask = line > thresh;
   maskDiffs = diff(mask);
   skinLoc = find( maskDiffs==1, 1 );
+  if numel( skinLoc ) == 0, skinLoc = numel( line ); end;
 end

@@ -1,6 +1,6 @@
 
-function [bscan1,bscan2,dx_mm,dz_mm,noisePower,trans,trueZ0_mm,trueZR_mm] = ...
-  loadDataCase( datacase )
+function [ bscan1, bscan2, dx_mm, dz_mm, noisePower, lambda0, deltaLambda, dLambda, ...
+  trans, trueZ0_mm, trueZR_mm ] = loadDataCase( datacase )
 
   if exist( '/Volumes/Seagate2TB/Data/OCTdata/autoConfocal/', 'dir' )
     mainDir = '/Volumes/Seagate2TB/Data/OCTdata/autoConfocal/';
@@ -12,6 +12,10 @@ function [bscan1,bscan2,dx_mm,dz_mm,noisePower,trans,trueZ0_mm,trueZR_mm] = ...
 
   options.dataDimension = 2;
   options.saveInterferogram = 0;
+
+  lambda0 = [];
+  deltaLambda = [];
+  dLambda = [];
 
   switch datacase
 
@@ -32,6 +36,7 @@ function [bscan1,bscan2,dx_mm,dz_mm,noisePower,trans,trueZ0_mm,trueZR_mm] = ...
       %noisePower = (0.5d-2)^2;
       noisePower = (1d5)^2;
       trans = 'vShift';
+      [lambda0,deltaLambda,dLambda] = getTelestoFalloffParams();
 
     case 2
       % structured phantom with vertical shift
@@ -50,6 +55,7 @@ function [bscan1,bscan2,dx_mm,dz_mm,noisePower,trans,trueZ0_mm,trueZR_mm] = ...
       %noisePower = (0.5d-2)^2;
       noisePower = (1d5)^2;
       trans = 'vShift';
+      [lambda0,deltaLambda,dLambda] = getTelestoFalloffParams();
 
     case 3
       % structured phantom with vertical shift
@@ -68,6 +74,7 @@ function [bscan1,bscan2,dx_mm,dz_mm,noisePower,trans,trueZ0_mm,trueZR_mm] = ...
       %noisePower = (0.5d-2)^2;
       noisePower = (1d5)^2;
       trans = 'vShift';
+      [lambda0,deltaLambda,dLambda] = getTelestoFalloffParams();
 
     case 4
       % structured phantom with shift and rotation
@@ -87,6 +94,7 @@ function [bscan1,bscan2,dx_mm,dz_mm,noisePower,trans,trueZ0_mm,trueZR_mm] = ...
       %noisePower = 10000000;
       noisePower = (1d5)^2;
       trans = 'yShearAndTrans';
+      [lambda0,deltaLambda,dLambda] = getTelestoFalloffParams();
 
     case 5
       % structured phantom with shift and rotation
@@ -105,6 +113,7 @@ function [bscan1,bscan2,dx_mm,dz_mm,noisePower,trans,trueZ0_mm,trueZR_mm] = ...
       %noisePower = (0.5d-2)^2;
       noisePower = (1d5)^2;
       trans = 'yShearAndTrans';
+      [lambda0,deltaLambda,dLambda] = getTelestoFalloffParams();
       
     case 6
       % structured phantom with shift and rotation
@@ -123,6 +132,7 @@ function [bscan1,bscan2,dx_mm,dz_mm,noisePower,trans,trueZ0_mm,trueZR_mm] = ...
       %noisePower = (0.5d-2)^2;
       noisePower = (1d5)^2;
       trans = 'yShearAndTrans';
+      [lambda0,deltaLambda,dLambda] = getTelestoFalloffParams();
 
     case 7
       % structured phantom with shift and rotation
@@ -143,6 +153,7 @@ function [bscan1,bscan2,dx_mm,dz_mm,noisePower,trans,trueZ0_mm,trueZR_mm] = ...
       %noisePower = (0.5d-2)^2;
       noisePower = (1d5)^2;
       trans = 'yShearAndTrans';
+      [lambda0,deltaLambda,dLambda] = getTelestoFalloffParams();
 
     case 8
       % structured phantom with shift and rotation
@@ -170,6 +181,7 @@ function [bscan1,bscan2,dx_mm,dz_mm,noisePower,trans,trueZ0_mm,trueZR_mm] = ...
       %noisePower = (0.5d-2)^2;
       noisePower = (1d5)^2;
       trans = 'yShearAndTrans';
+      [lambda0,deltaLambda,dLambda] = getTelestoFalloffParams();
 
     case 9
       % Zeiss data from Dr. Leng
@@ -259,6 +271,7 @@ function [bscan1,bscan2,dx_mm,dz_mm,noisePower,trans,trueZ0_mm,trueZR_mm] = ...
       %noisePower = (0.5d-2)^2;
       noisePower = (1d4)^2;
       trans = 'yShearAndTrans';
+      [lambda0,deltaLambda,dLambda] = getTelestoFalloffParams();
 
     case 13
       % layered phantom with vertical shift
@@ -279,6 +292,7 @@ function [bscan1,bscan2,dx_mm,dz_mm,noisePower,trans,trueZ0_mm,trueZR_mm] = ...
       %noisePower = (0.5d-2)^2;
       noisePower = (1d5)^2;
       trans = 'vShift';
+      [lambda0,deltaLambda,dLambda] = getTelestoFalloffParams();
 
     case 14
       % structured phantom with shift and rotation
@@ -301,6 +315,7 @@ function [bscan1,bscan2,dx_mm,dz_mm,noisePower,trans,trueZ0_mm,trueZR_mm] = ...
       %noisePower = (0.5d-2)^2;
       noisePower = (1d5)^2;
       trans = 'yShearAndTrans';
+      [lambda0,deltaLambda,dLambda] = getTelestoFalloffParams();
 
     case 15
       % structured phantom with shift and rotation
@@ -323,6 +338,7 @@ function [bscan1,bscan2,dx_mm,dz_mm,noisePower,trans,trueZ0_mm,trueZR_mm] = ...
       %noisePower = (0.5d-2)^2;
       noisePower = (1d5)^2;
       trans = 'yShearAndTrans';
+      [lambda0,deltaLambda,dLambda] = getTelestoFalloffParams();
       
     case 16
       % Just noise
@@ -343,6 +359,26 @@ function [bscan1,bscan2,dx_mm,dz_mm,noisePower,trans,trueZ0_mm,trueZR_mm] = ...
       %noisePower = (0.5d-2)^2;
       noisePower = (1d5)^2;
       trans = 'yShearAndTrans';
+      [lambda0,deltaLambda,dLambda] = getTelestoFalloffParams();
+
+    case 17
+      % Focal plane high above sample
+      dataDir = [mainDir,'/20171215_responseToReviewers/focalPlaneAboveSample'];
+      file1 = [dataDir,'/location2/reference/OCTData_51.raw'];
+      file2 = [dataDir,'/location2/transformed/OCTData_40.raw'];
+      trueZ0_mm = -0.5;   % mm
+      trueZr_mm = 0.21/2;  % mmOCTData_0.raw
+      n = 1.4;  % index of refraction in sample
+      trueZR_mm = trueZr_mm * 2 * n;
+      [interf1,info1] = getInterferograms(file1,options);
+      bscan1_dB = getBScans(interf1);
+      [interf2,info2] = getInterferograms(file2,options);
+      bscan2_dB = getBScans(interf2);
+      dx_mm = 2.57/size(bscan1_dB,2);
+      dz_mm = 2.57/size(bscan1_dB,1);
+      noisePower = (1d5)^2;
+      trans = 'yShearAndTrans';
+      [lambda0,deltaLambda,dLambda] = getTelestoFalloffParams();
   end
 
   bscan1 = intensity2dB( bscan1_dB, -1 );

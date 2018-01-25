@@ -3,9 +3,12 @@ function run_paperSims
   clear; close all; rng(1);
   addpath(genpath(pwd))
 
+  disp('TURN OFF THE MASK IN DRC; THERE IS NO SURFACE ON THE PHANTOM!!!');
+  warning('TURN OFF THE MASK IN DRC; THERE IS NO SURFACE ON THE PHANTOM!!!');
+
   fid = fopen('./paperSimsOut.csv','w');
-  fprintf(fid, ['name, algorithm, z0, z0_true, zR, zR_true, mus, thicks, ', ...
-    'noiseProportion, meanEtbDepth, time taken (s) \n']);
+  fprintf(fid, ['algorithm, z0, z0_true, zR, zR_true, mus, thicks, ', ...
+    'noiseProportion, noisePower, meanEtbDepth, time taken (s) \n']);
 
   noiseProportion = 1d-5;
   noisePower = (0.5d-2)^2;
@@ -20,7 +23,7 @@ function run_paperSims
 
   z0_true = 0.5;
 
-  simMus{1} = [1,2];
+  simMus{1} = [1.0,4.0];
   simThicks{1} = [1];
 
   zRs = [ 0.050, 0.1059, 0.238 ];
@@ -41,15 +44,12 @@ function run_paperSims
       thickStrings{end+1} = num2str( max(z) - sum(simThicks{1}) );
       thickString = strjoin( thickStrings, '_' );
 
-      for z0=z0_true-0.1:0.01:z0_true+0.1;
+      for z0=z0_true-0.15 : 0.01 : z0_true+0.15
         simIndx = evalCodes( simIndx, I, z, z0, zR, fid, ...
           z0_true, zR, muString, thickString, noiseProportion, noisePower, trueMu );
       end
     end
   end
-  clear simMus;
-  clear simThicks;
-
 
 
   %%  Rayleigh Range Error
@@ -57,9 +57,6 @@ function run_paperSims
   fprintf( fid, 'Rayleigh range error analysis  \n');
 
   z0 = 0.5;
-
-  simMus{1} = [1,2];
-  simThicks{1} = [1];
 
   zRs_true = [ 0.050, 0.1059, 0.238 ];
   zRs_true = zRs_true * 2 * 1.37;  % n = 1.37
@@ -79,15 +76,12 @@ function run_paperSims
       thickStrings{end+1} = num2str( max(z) - sum(simThicks{1}) );
       thickString = strjoin( thickStrings, '_' );
 
-      for zR = zR_true-0.1 : 0.1/20 : zR_true+0.1
+      for zR = zR_true-0.1 : 0.1/20 : zR_true+0.15
         simIndx = evalCodes( simIndx, I, z, z0, zR, fid, ...
           z0, zR_true, muString, thickString, noiseProportion, noisePower, trueMu );
       end
     end
   end
-  clear simMus;
-  clear simThicks;
-
 
 
   %% Cleanup
@@ -106,8 +100,8 @@ function simIndx_out = evalCodes( simIndx, I, z, z0, zR, fid, ...
   timeTaken = toc;
   meanEtbDepth = findErrorMetrics( muFit, trueMu, z, offsetThreshPercent );
   fprintf( fid, ['DRC, %8.3f, %8.3f, %8.3f, %8.3f, ', muString, ...
-        ', ', thickString, ', %5.2e, %8.3f, %16.11f\n'], ...
-        z0, z0_true, zR, zR_true, noiseProportion, meanEtbDepth, timeTaken );
+        ', ', thickString, ', %5.2e, %5.2e, %8.3f, %16.11f\n'], ...
+        z0, z0_true, zR, zR_true, noiseProportion, noisePower, meanEtbDepth, timeTaken );
   simIndx = simIndx + 1;
   
   simIndx_out = simIndx;

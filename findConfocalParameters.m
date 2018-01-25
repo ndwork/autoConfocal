@@ -1,6 +1,6 @@
 
 function [z0, zR, overlap_mmSq] = findConfocalParameters( bscan1, bscan2, ...
-  dx, dz, shear, trueZ0_mm, trueZR_mm, dx_mm, dz_mm )
+  dx, dz, shear, lambda0, deltaLambda, dLambda, trueZ0_mm, trueZR_mm, dx_mm, dz_mm )
   % [z0, zR] = findConfocalParameters( img1, img2, dx, dz, shear )
   %
   % Determines the confocal function parameters assuming that the only
@@ -14,6 +14,8 @@ function [z0, zR, overlap_mmSq] = findConfocalParameters( bscan1, bscan2, ...
   % dx - (default 0) horizontal translation
   % dz - (default 0) vertical translation
   % shear - (default 0) amount to shear image 2
+  % lambda0, deltaLamba, and dLambda are fall-off parameters.  See the
+  %   makeFalloffFunction for details.
   %
   % Outputs:
   % z0 - the focal plane depth (in pixels)
@@ -26,12 +28,12 @@ function [z0, zR, overlap_mmSq] = findConfocalParameters( bscan1, bscan2, ...
   % implied warranties of merchantability or fitness for a particular
   % purpose.
 
-  %goodThresh = -90;
   noiseFraction = 0.05;
   %gWidth = [19 9];
   gWidth = 19;
   gSig = 5;
   maskErode = 19;
+  accountForFalloff = 0;
 
   noiseIndx = floor( noiseFraction*size(bscan1,1) );
   tmp = bscan1( 1:noiseIndx, : );
@@ -41,15 +43,15 @@ function [z0, zR, overlap_mmSq] = findConfocalParameters( bscan1, bscan2, ...
   noiseMean2 = median( tmp(:) );
   deBiased2 = max( bscan2 - noiseMean2, min(bscan2(:)) );
 
-%nCols = size( deBiased1, 2 );
-%z = (0:511) / 512 * 2.57;
-%[lambda,deltaLambda,dLambda] = getTelestoFalloffParams();
-%f = makeFalloffFunction( z, lambda, deltaLambda, dLambda );
-%for i=1:nCols
-%  deBiased1(:,i) = deBiased1(:,i) ./ f';
-%  deBiased2(:,i) = deBiased2(:,i) ./ f';
-%end
-
+  if accountForFalloff ~= 0
+    nCols = size( deBiased1, 2 );
+    z = (0:511) / 512 * 2.57;
+    f = makeFalloffFunction( z, lambda0, deltaLambda, dLambda );
+    for i=1:nCols
+     deBiased1(:,i) = deBiased1(:,i) ./ f';
+     deBiased2(:,i) = deBiased2(:,i) ./ f';
+    end
+  end
 
   bscan1_dB = intensity2dB( deBiased1 );
   bscan2_dB = intensity2dB( deBiased2 );
@@ -108,7 +110,6 @@ disp(['The amount of overlap is (mm^2): ', num2str(overlap_mmSq)]);
   %normWeights = normWeights .* normWeights;  %<-- Was using this one
   %normWeights = sqrt( abs(max(meanImg,0)) );
   %normWeights = abs(diff_dB);
-  %normWeights( minImg < goodThresh | mask==0 ) = 0;
   normWeights = max(minImg,0);
   normWeights = normWeights .* mask;
 figure; plotnice( mean(normWeights,2) ); title('Norm Weights');
